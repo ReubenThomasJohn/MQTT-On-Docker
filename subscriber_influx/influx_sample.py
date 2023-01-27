@@ -13,7 +13,7 @@ token = os.getenv("INFLUX_API_TOKEN")
 org = "Dev"
 url = "https://ap-southeast-2-1.aws.cloud2.influxdata.com"
 
-bucket_name="SensorDB"
+bucket_name="SensorDB1"
 
 influx_client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
 
@@ -34,29 +34,29 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, message):
   write_api = influx_client.write_api(write_options=SYNCHRONOUS)
-  with influx_client:
-    try:
-        read_message = message.payload.decode("utf-8")
-        frames = read_message[1:-1].split(',')
-        for frame in frames:
-          arr = frame.split()        
-          a = {'device': arr[0][1:], 'wind_speed':arr[3], # add '_id': str(arr[1]) + " " + str(arr[2])
-          'wind_heading': arr[4], 'pm1':arr[5], 'pm25':arr[6], 'pm10':arr[7][:-1]}
-          # print(str(arr[1]) + " " + str(arr[2])) #this is the "_id" field in mongo doc   
-          JsonData = {"measurement":"SensorA1-MQTT",
-              "tags": {
-                "sensor_id": "123",              
-              },
-              "fields": a
-              } 
-          print(JsonData)
-          write_api.write(bucket=bucket_name, record=JsonData)
-          time.sleep(.1)
+  time.sleep(.1)
+  try:
+      read_message = message.payload.decode("utf-8")
+      frames = read_message[1:-1].split(',')
+      for frame in frames:
+        arr = frame.split()        
+        a = {'device': arr[0][1:], 'wind_speed':float(arr[3]), # add '_id': str(arr[1]) + " " + str(arr[2])
+        'wind_heading': float(arr[4]), 'pm1':float(arr[5]), 'pm25':float(arr[6]), 'pm10':float(arr[7][:-1])}
+        # print(str(arr[1]) + " " + str(arr[2])) #this is the "_id" field in mongo doc   
+        JsonData = {"measurement":"SensorA1-MQTT",
+            "tags": {
+              "sensor_id": "123",              
+            },
+            "fields": a
+            } 
+        print(JsonData)
+        write_api.write(bucket=bucket_name, record=JsonData)
+        
 
-        print("Topic: " + str(message.topic))
-    
-    except:
-        pass
+      print("Topic: " + str(message.topic))
+  
+  except:
+      pass
 
 
 connected = False
@@ -75,5 +75,5 @@ client.loop_start()
 client.subscribe("praan/mqtt")
 while True:
     client.on_message = on_message
-    time.sleep(5)
+    # time.sleep(5)
 

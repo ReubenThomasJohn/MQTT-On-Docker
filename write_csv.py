@@ -27,4 +27,4 @@ while True:
         'pm1': 12, 'pm25': 45, 'pm10':56}, index=[1])
         # df.index = np.arange(1, len(df) + 1)
         df.to_csv('praan_sample.csv', header=True)
-        time.sleep(5)
+        time.sleep(10)

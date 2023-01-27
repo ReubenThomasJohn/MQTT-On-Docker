@@ -61,6 +61,6 @@ client.loop_start()
 while True:
     data = read_from_csv('praan_sample.csv')
     publish(client, data)
-    sleep(5)
+    sleep(10)
 
     

@@ -1,0 +1,9 @@
+## Create a virtual environment if you prefer to do so
+
+```python3 -m venv praa```
+```source praan/bin/activate```
+
+```praan/bin/pip install pandas```
+
+
+

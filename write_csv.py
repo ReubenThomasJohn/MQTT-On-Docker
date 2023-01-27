@@ -2,7 +2,6 @@
 import random
 import pandas as pd
 import datetime
-import numpy as np
 import time
 counter = 1
 
@@ -17,7 +16,7 @@ while True:
             'pm1': 12, 'pm25': 45, 'pm10':56}, index=[counter]) 
             # df.index = np.arange(1, len(df) + 1)
             df.to_csv('praan_sample.csv', mode='a', header=False)
-            time.sleep(5)
+            time.sleep(3)
             counter += 1
         trigger = 0
         counter = 1
@@ -27,4 +26,4 @@ while True:
         'pm1': 12, 'pm25': 45, 'pm10':56}, index=[1])
         # df.index = np.arange(1, len(df) + 1)
         df.to_csv('praan_sample.csv', header=True)
-        time.sleep(10)
+        time.sleep(3)

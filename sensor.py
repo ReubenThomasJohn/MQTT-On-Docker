@@ -9,4 +9,4 @@ sensor.loop_start()
 while True:
     data = sensor.read_from_storage('praan_sample.csv')
     sensor.publish_to_topic(data, sensor.topic)
-    sleep(2)
+    sleep(5)

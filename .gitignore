@@ -1,2 +1,3 @@
 praan/
 .env
+__pycache__/

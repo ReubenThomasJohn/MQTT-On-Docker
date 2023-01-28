@@ -5,10 +5,9 @@ from pymongo import MongoClient
 import os
 
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
+# from dotenv import load_dotenv
+# load_dotenv()
+connection_string = os.environ.get("MONGO_CONNECTION_STRING") # environment vars
 
 # 50 per frame
 
@@ -44,7 +43,7 @@ def on_message(client, userdata, message):
 
 # Set up client for MongoDB
 # mongoClient=MongoClient("mongodb://localhost:27017/")
-connection_string = os.getenv('MONGO_CONNECTION_STRING')
+# connection_string = os.getenv('MONGO_CONNECTION_STRING')
 mongoClient=MongoClient(connection_string)
 db=mongoClient.SensorData
 collection=db.sensor1

@@ -54,19 +54,20 @@ class MQTT_Device(mqtt_client.Client):
 
             data.append(data_string)
         return data
+
+    def on_message(self, client, userdata, message):
+        try:
+            return message.payload.decode("utf-8")       
+        except:
+            pass
+
+    # def push_to_broker(self, sleep_time = 5):
+    #     self = self.connect_broker('broker.hivemq.com', 1883, 'praan/mqtt')
+    #     self.loop_start()
+    #     while True:
+    #         data = self.read_from_storage('praan_sample.csv')
+    #         self.publish_to_topic(data, self.topic)
+    #         sleep(sleep_time)
     
-    def push_to_broker(self, sleep_time = 5):
-        self = self.connect_broker('broker.hivemq.com', 1883, 'praan/mqtt')
-        self.loop_start()
-        while True:
-            data = self.read_from_storage('praan_sample.csv')
-            self.publish_to_topic(data, self.topic)
-            sleep(sleep_time)
 
-    def receive_from_broker(self, sleep_time = 5):
-        pass
-
-sensor = MQTT_Device('s02')
-print(sensor)
-sensor.loop()
     

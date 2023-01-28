@@ -39,9 +39,9 @@ def save_to_storage(filename='praan_sample.csv'):
     curr_time = time.time()
     while True:
         if time.time() - curr_time < network_downtime:
-            df = pd.DataFrame({'device':str('abc123'), 't':datetime.datetime.now(), 'w':random.randint(32, 48), 
-            'h':random.randint(180, 280), 'pm1': random.randint(40, 80), 
-            'pm25': random.randint(40, 100), 'pm10': random.randint(50, 120)}, index=[0]) #index = [counter] 
+            df = pd.DataFrame({'device':str('abc123'), 't':datetime.datetime.now(), 'w':random.randint(32, 36), 
+            'h':random.randint(180, 200), 'pm1': random.randint(40, 50), 
+            'pm25': random.randint(40, 80), 'pm10': random.randint(50, 90)}, index=[0]) #index = [counter] 
             # df.index = np.arange(1, len(df) + 1)
             with open(filename, 'a') as f:
                 # df.to_csv('praan_sample.csv', mode='a', header=False)
@@ -71,13 +71,13 @@ def read_from_storage(csv_file_path):
     return data
 
 def generate_values():
-    sensor_id = 'abc123'
+    sensor_id = 'a1'
     timestamp = datetime.datetime.now()
-    wind_speed = random.randint(32, 48)
-    wind_heading = random.randint(180, 280)
-    pm1 = random.randint(40, 80) #micro-gram/m^3
-    pm25 = random.randint(40, 100)
-    pm10 = random.randint(50, 120)
+    wind_speed = random.randint(32, 36)
+    wind_heading = random.randint(180, 200)
+    pm1 = random.randint(40, 50) #micro-gram/m^3
+    pm25 = random.randint(40, 80)
+    pm10 = random.randint(50, 90)
 
     data = str(sensor_id) + " " + str(timestamp) + " " + str(wind_speed) + " " + str(wind_heading) \
         + " " + str(pm1) + " " + str(pm25) + " " + str(pm10)

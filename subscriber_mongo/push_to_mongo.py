@@ -28,7 +28,7 @@ def on_message(client, userdata, message):
         data_to_DB = []
         for index, frame in enumerate(frames):
             arr = frame.split()        
-            a = {'device': arr[0][1:], 'wind_speed':arr[3], # add '_id': str(arr[1]) + " " + str(arr[2])
+            a = {'device': arr[0][1:], 'wind_speed':arr[3], '_id': str(arr[1]) + " " + str(arr[2]),
             'wind_heading': arr[4], 'pm1':arr[5], 'pm25':arr[6], 'pm10':arr[7][:-1]}
             data_to_DB.append(a)
             # print(str(arr[1]) + " " + str(arr[2])) #this is the "_id" field in mongo doc

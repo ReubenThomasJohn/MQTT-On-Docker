@@ -14,7 +14,7 @@ NOW:
 
 ```loop_start()``` handles reconnections gracefully.,
 
-
+times are saved in utc
 
 
 FOR LATER:

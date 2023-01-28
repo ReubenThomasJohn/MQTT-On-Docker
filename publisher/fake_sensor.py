@@ -39,8 +39,9 @@ def save_to_storage(filename='praan_sample.csv'):
     curr_time = time.time()
     while True:
         if time.time() - curr_time < network_downtime:
-            df = pd.DataFrame({'device':str('abc123'), 't':datetime.datetime.now(), 'w':1.23, 'h':23, 
-            'pm1': 12, 'pm25': 45, 'pm10':56}, index=[0]) #index = [counter] 
+            df = pd.DataFrame({'device':str('abc123'), 't':datetime.datetime.now(), 'w':random.randint(32, 48), 
+            'h':random.randint(180, 280), 'pm1': random.randint(40, 80), 
+            'pm25': random.randint(40, 100), 'pm10': random.randint(50, 120)}, index=[0]) #index = [counter] 
             # df.index = np.arange(1, len(df) + 1)
             with open(filename, 'a') as f:
                 # df.to_csv('praan_sample.csv', mode='a', header=False)

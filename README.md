@@ -6,6 +6,14 @@ TODO:
 5. Create better sim data function \
 6. http://www.steves-internet-guide.com/client-connections-python-mqtt/#:~:text=The%20Paho%20client%20provides%20the,you%20will%20need%20to%20examine. : Check to see if disconnection sim can be improved.
 
+NOW:
+1. Better sim data, bring write csv inside publisher
+2. Git push
+3. Put everything on ec2
+4. Fill install_docker_ec2.md file
+
+```loop_start()``` handles reconnections gracefully.,
+
 
 
 

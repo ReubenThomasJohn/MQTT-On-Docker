@@ -1,1 +1,5 @@
 pandas
+pymongo
+paho-mqtt
+python-dotenv
+influxdb-client

@@ -2,14 +2,14 @@ import influxdb_client, os
 from influxdb_client import BucketsApi
 from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqttclient
-from dotenv import load_dotenv
+
 import random
 import time
+# from dotenv import load_dotenv
+# load_dotenv()
 
-load_dotenv()
-
-# token = os.environ.get("") # environment vars
-token = os.getenv("INFLUX_API_TOKEN")
+token = os.environ.get("INFLUX_API_TOKEN") # environment vars
+# token = os.getenv("INFLUX_API_TOKEN")
 org = "Dev"
 url = "https://ap-southeast-2-1.aws.cloud2.influxdata.com"
 

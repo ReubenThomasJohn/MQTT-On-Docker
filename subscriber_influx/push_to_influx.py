@@ -1,16 +1,16 @@
 import influxdb_client, os
-from influxdb_client import BucketsApi
+from influxdb_client import BucketsApi, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqttclient
 import datetime
 
 import random
 import time
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
-token = os.environ.get("INFLUX_API_TOKEN") # environment vars
-# token = os.getenv("INFLUX_API_TOKEN")
+# token = os.environ.get("INFLUX_API_TOKEN") # environment vars
+token = os.getenv("INFLUX_API_TOKEN")
 org = "Dev"
 url = "https://ap-southeast-2-1.aws.cloud2.influxdata.com"
 
@@ -33,40 +33,69 @@ def on_connect(client, userdata, flags, rc):
     else:
         print("client is not connected")
 
+def convert_to_nanoseconds(time_string):
+    converted = datetime.datetime(int(time_string[:4]), int(time_string[6]), 
+            int(time_string[8:10]), int(time_string[11:13]),
+            int(time_string[14:16]), int(time_string[17:19]), int(time_string[20:]))
+    return converted
+
 def on_message(client, userdata, message):
   write_api = influx_client.write_api(write_options=SYNCHRONOUS)
   time.sleep(.1)
-  try:
-      read_message = message.payload.decode("utf-8")
-      frames = read_message[1:-1].split(',')
-      for frame in frames:
-        arr = frame.split()  
-        # time_string = str(arr[1]) + " " + str(arr[2])
-        # time_stamp = convert_to_nanoseconds(time_string)      
-        a = {'device': arr[0][1:], 'wind_speed':float(arr[3]), 
-        'wind_heading': float(arr[4]), 'pm1':float(arr[5]), 'pm25':float(arr[6]), 'pm10':float(arr[7][:-1])}
-        # print(str(arr[1]) + " " + str(arr[2])) #this is the "_id" field in mongo doc   
-        JsonData = {"measurement":"SensorA1-MQTT",
-            "tags": {
-              "sensor_id": "123",              
-            },
-            "fields": a
-            # "time" : time_stamp
-            } 
-        print(JsonData)
-        write_api.write(bucket=bucket_name, record=JsonData)
-        
+  read_message = message.payload.decode("utf-8")
+  frames = read_message.split(',')
+  for frame in frames:
+    arr = frame.split()  
+    # time_string = str(arr[1]) + " " + str(arr[2])
+    # print("time string: ", time_string)
+    # time_stamp = convert_to_nanoseconds(time_string) 
+    # print(time_stamp)     
+    # # print(arr)
+    # 'a1 2023-01-29 18:47:29.870494 34 198 50 42 50'
+    # a= {'device': arr[0],
+    # 'wind_speed':float(arr[3]),
+    # 'wind_heading': float(arr[4]),
+    # 'pm1':float(arr[5]),
+    # 'pm25':float(arr[6]),
+    # 'pm10':float(arr[7])}
 
-      print("Topic: " + str(message.topic))
-  
-  except:
-      pass
+    # # print(str(arr[1]) + " " + str(arr[2])) #this is the "_id" field in mongo doc   
+    # JsonData = {"measurement":"SensorA1-MQTT",
+    #     "tags": {
+    #       "sensor_id": "123",              
+    #     },
+    #     "fields": a
+    #     # "time" : time_stamp
+    #     } 
+    # print(JsonData)
 
-def convert_to_nanoseconds(time_string):
-    converted = datetime(int(time_string[:4]), int(time_string[6]), 
-            int(time_string[8:10]), int(time_string[11:13]),
-            int(time_string[14:16]), int(time_string[17:19])).timestamp()
-    return converted
+    
+    time_string = str(arr[1]) + " " + str(arr[2])
+    print(time_string)
+    time_stamp = convert_to_nanoseconds(time_string) 
+    print(time_stamp)
+
+
+    point = Point("measurement").field('sensor_id', arr[0]).field('wind_speed', float(arr[3])).field('wind_heading', float(arr[4])) \
+    .field('pm1', float(arr[5])).field('pm25', float(arr[6])).field('pm10', float(arr[7])).time(time=datetime.datetime.utcnow())
+    print(f'Writing to InfluxDB cloud: {point.to_line_protocol()} ...')
+    # write_api.write(bucket=bucket_name, org=org, record=JsonData)
+
+    print()
+    print('success')
+    print()
+
+    write_api.write(bucket=bucket_name, record=point)
+    # write_api.write(bucket=bucket_name, record=JsonData)
+      
+
+    print("Topic: " + str(message.topic))
+
+  # except:
+  #   print('excepted')
+  #     # pass
+
+
 
 
 connected = False

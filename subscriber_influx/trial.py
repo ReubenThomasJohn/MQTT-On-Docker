@@ -1,15 +1,18 @@
 from datetime import datetime
 
 
-string = '2022-09-20 11:27:46'
+string = '2023-01-29 18:17:10.491136'
 
-def convert_to_nanoseconds(time_string):
+def convert_to_nanoseconds(string):
     converted = datetime(int(string[:4]), int(string[6]), 
             int(string[8:10]), int(string[11:13]),
-            int(string[14:16]), int(string[17:19])).timestamp()
+            int(string[14:16]), int(string[17:19]), int(string[20:]))
     return converted
 
 print(convert_to_nanoseconds(string))
+
+# print(datetime(2022, 12, 3))
+print(datetime.utcnow())
 
 
 

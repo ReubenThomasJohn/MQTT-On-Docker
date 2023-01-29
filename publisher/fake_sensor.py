@@ -39,7 +39,7 @@ def save_to_storage(filename='praan_sample.csv'):
     curr_time = time.time()
     while True:
         if time.time() - curr_time < network_downtime:
-            df = pd.DataFrame({'device':str('abc123'), 't':datetime.datetime.now(), 'w':random.randint(32, 36), 
+            df = pd.DataFrame({'device':str('a'), 't':datetime.datetime.now(), 'w':random.randint(32, 36), 
             'h':random.randint(180, 200), 'pm1': random.randint(40, 50), 
             'pm25': random.randint(40, 80), 'pm10': random.randint(50, 90)}, index=[0]) #index = [counter] 
             # df.index = np.arange(1, len(df) + 1)
@@ -71,7 +71,7 @@ def read_from_storage(csv_file_path):
     return data
 
 def generate_values():
-    sensor_id = 'a1'
+    sensor_id = 'a'
     timestamp = datetime.datetime.now()
     wind_speed = random.randint(32, 36)
     wind_heading = random.randint(180, 200)
@@ -122,10 +122,10 @@ def publish(client, data):
 
 client = connect_mqtt()
 client.loop_start()
-os.remove('praan_sample.csv')
+# os.remove('praan_sample.csv')
 
 while True:
-    network_down = 4 == random.randint(1, 5)
+    network_down = 4 == random.randint(1, 5000)
     print(network_down)
     if network_down:
         t1 = threading.Thread(target=save_to_storage)

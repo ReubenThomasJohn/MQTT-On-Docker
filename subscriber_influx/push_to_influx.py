@@ -3,6 +3,8 @@ from influxdb_client import BucketsApi, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqttclient
 import datetime
+from datetime import timezone
+import pytz
 
 import random
 import time
@@ -37,6 +39,7 @@ def convert_to_nanoseconds(time_string):
     converted = datetime.datetime(int(time_string[:4]), int(time_string[6]), 
             int(time_string[8:10]), int(time_string[11:13]),
             int(time_string[14:16]), int(time_string[17:19]), int(time_string[20:]))
+    converted = converted.replace(tzinfo=timezone.utc)
     return converted
 
 def on_message(client, userdata, message):
@@ -45,11 +48,8 @@ def on_message(client, userdata, message):
   read_message = message.payload.decode("utf-8")
   frames = read_message.split(',')
   for frame in frames:
-    arr = frame.split()  
-    # time_string = str(arr[1]) + " " + str(arr[2])
-    # print("time string: ", time_string)
-    # time_stamp = convert_to_nanoseconds(time_string) 
-    # print(time_stamp)     
+    arr = frame.split() 
+    print(arr)   
     # # print(arr)
     # 'a1 2023-01-29 18:47:29.870494 34 198 50 42 50'
     # a= {'device': arr[0],
@@ -71,13 +71,31 @@ def on_message(client, userdata, message):
 
     
     time_string = str(arr[1]) + " " + str(arr[2])
-    print(time_string)
-    time_stamp = convert_to_nanoseconds(time_string) 
-    print(time_stamp)
+    # print("Time String: ", time_string)
+    # time_stamp = convert_to_nanoseconds(time_string) 
+    
+    
+    # try:
+    #   print("Time stamp: ", time_stamp)
+    #   print()
+    #   print("UTC Now: ", datetime.datetime.utcnow())
+    # except:
+    #   print("excepted")
 
+    local = pytz.timezone("Asia/Kolkata")
+    naive = datetime.datetime.strptime(time_string, "%Y-%m-%d %H:%M:%S.%f")
+    local_dt = local.localize(naive, is_dst=True)
+    utc_dt = local_dt.astimezone(pytz.utc)
+    influx_timestamp = utc_dt.strftime("%Y-%m-%d %H:%M:%S.%f")
 
-    point = Point("measurement").field('sensor_id', arr[0]).field('wind_speed', float(arr[3])).field('wind_heading', float(arr[4])) \
-    .field('pm1', float(arr[5])).field('pm25', float(arr[6])).field('pm10', float(arr[7])).time(time=datetime.datetime.utcnow())
+    point = Point("measurement") \
+    .field('sensor_id', arr[0]) \
+    .field('wind_speed', float(arr[3])) \
+    .field('wind_heading', float(arr[4])) \
+    .field('pm1', float(arr[5])) \
+    .field('pm25', float(arr[6])) \
+    .field('pm10', float(arr[7]))\
+    .time(time=influx_timestamp)     #.time(time=datetime.datetime.utcnow()) \
     print(f'Writing to InfluxDB cloud: {point.to_line_protocol()} ...')
     # write_api.write(bucket=bucket_name, org=org, record=JsonData)
 

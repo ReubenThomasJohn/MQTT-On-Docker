@@ -67,7 +67,12 @@ def read_from_storage(csv_file_path):
         data_string = str(sensor_id) + " " + str(timestamp) + " " + str(wind_speed) + " " + str(wind_heading) \
         + " " + str(pm1) + " " + str(pm25) + " " + str(pm10)
 
+        # data_string = sensor_id + " " + timestamp + " " + wind_speed + " " + wind_heading \
+        # + " " + pm1 + " " + pm25 + " " + pm10
+
+        
         data.append(data_string)
+        ["['a", '2023-01-30', '10:48:58.436465', '35', '185', '49', '69', "50'"]
     return data
 
 def generate_values():
@@ -125,7 +130,7 @@ client.loop_start()
 # os.remove('praan_sample.csv')
 
 while True:
-    network_down = 4 == random.randint(1, 5000)
+    network_down = 4 == random.randint(1, 5)
     print(network_down)
     if network_down:
         t1 = threading.Thread(target=save_to_storage)

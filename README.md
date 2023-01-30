@@ -16,6 +16,7 @@ In case the login creds are necessary, username: ```admin```, password: ```admin
     This contains the ```push_to_mongo.py``` file that subscribes to the ```praan/mqtt``` topic, and when a message is received, pushes it into MongoDB. \
     d. Each of these folders have a ```Dockerfile``` and a ```docker_commands.md``` file that has the required instructions to create an image and run the container. \
     e. There are currently three ec2 instances that have been provisioned. One that runs grafana (created directly using the official grafana image), one instance that runs the ```push_to_influx.py``` file and one for the ```push_to_mongo.py``` file. The ```fake_sensor.py``` file is being run locally. It sends a message every 30 seconds and is made to randomly go offline. 
+    ![ec2](screenshots/ec2_instances.png)
 
 ## Creating DBs:
 1. For InfluxDB, the API token needs to be made use of in the code. Additionally, the ```url``` string and ```organization``` names need to be provided.

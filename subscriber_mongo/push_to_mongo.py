@@ -23,7 +23,10 @@ def on_message(client, userdata, message):
 
     try:
         read_message = message.payload.decode("utf-8")
-        frames = read_message.split(',')
+        if read_message[0] == '[':
+            frames = read_message[1:-1].split(',')
+        else:
+            frames = read_message.split(',')
         # print(frames)
         data_to_DB = []
         for index, frame in enumerate(frames):

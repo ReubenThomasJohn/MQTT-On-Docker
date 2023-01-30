@@ -9,6 +9,11 @@ import sys
 import os
 
 def save_to_storage(filename='praan_sample.csv'):
+    '''
+    This function is run on a thread if the network in simulation goes off. 
+    This is made to simulate the storage (writing to a csv file) of the sensor since messages cannot be 
+    pushed out. Every 30 seconds, a messsage is written. 
+    '''
     network_downtime = random.randint(20, 40)
     print("Network down for: ", str(network_downtime) + " s")
     curr_time = time.time()
@@ -26,6 +31,9 @@ def save_to_storage(filename='praan_sample.csv'):
         sys.exit()
 
 def read_from_storage(csv_file_path):
+    '''
+    A function to read from storage (csv file) once network is back
+    '''
     df = pd.read_csv(csv_file_path) #optimize this part
     # print(len(df))
     data = []
@@ -53,6 +61,9 @@ def read_from_storage(csv_file_path):
     return data
 
 def generate_values():
+    '''
+    If network is working, random values are generated every 30 seconds.
+    '''
     sensor_id = 'a'
     timestamp = datetime.datetime.now()
     wind_speed = random.randint(32, 36)
@@ -110,6 +121,7 @@ client.loop_start()
 # os.remove('praan_sample.csv')
 
 while True:
+    # Simulating the network going offline. 
     network_down = 4 == random.randint(1, 5)
     print(network_down)
     if network_down:
@@ -128,6 +140,6 @@ while True:
         # time.sleep(2)
 
 
-# https://www.mdpi.com/2073-4433/6/1/150
+
 
     

@@ -18,7 +18,8 @@ In case the login creds are necessary, username: ```admin```, password: ```admin
     e. There are currently three ec2 instances that have been provisioned. One that runs grafana (created directly using the official grafana image), one instance that runs the ```push_to_influx.py``` file and one for the ```push_to_mongo.py``` file. The ```fake_sensor.py``` file is being run locally. It sends a message every 30 seconds and is made to randomly go offline. 
 
 ## Creating DBs:
-1. For InfluxDB, the API token needs to be made use of in the code. The bucket name is provided in the code, if the bucket does not exist, it will be made.
+1. For InfluxDB, the API token needs to be made use of in the code. Additionally, the ```url``` string and ```organization``` names need to be provided.
+The bucket name is provided in the code, if the bucket does not exist, it will be made, provided the ```url``` and ```organization``` values are correct and provided.
 2. For MongoDB, the connection string is used to connect to the DB. 
 3. Since it is not advisable to store secrets online, I pass the environment variable to the container, during the ```docker run``` command. 
 

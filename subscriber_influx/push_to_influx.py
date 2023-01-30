@@ -54,39 +54,8 @@ def on_message(client, userdata, message):
       frames = read_message.split(',')
     # print("First: ", frames[0])
     for frame in frames:
-      arr = frame.split() 
-      # print(arr)   
-      # # print(arr)
-      # 'a1 2023-01-29 18:47:29.870494 34 198 50 42 50'
-      # a= {'device': arr[0],
-      # 'wind_speed':float(arr[3]),
-      # 'wind_heading': float(arr[4]),
-      # 'pm1':float(arr[5]),
-      # 'pm25':float(arr[6]),
-      # 'pm10':float(arr[7])}
-
-      # # print(str(arr[1]) + " " + str(arr[2])) #this is the "_id" field in mongo doc   
-      # JsonData = {"measurement":"SensorA1-MQTT",
-      #     "tags": {
-      #       "sensor_id": "123",              
-      #     },
-      #     "fields": a
-      #     # "time" : time_stamp
-      #     } 
-      # print(JsonData)
-
-      
+      arr = frame.split()       
       time_string = str(arr[1]) + " " + str(arr[2])
-      # print("Time String: ", time_string)
-      # time_stamp = convert_to_nanoseconds(time_string) 
-      
-      
-      # try:
-      #   print("Time stamp: ", time_stamp)
-      #   print()
-      #   print("UTC Now: ", datetime.datetime.utcnow())
-      # except:
-      #   print("excepted")
 
       local = pytz.timezone("Asia/Kolkata")
       naive = datetime.datetime.strptime(time_string, "%Y-%m-%d %H:%M:%S.%f")
@@ -94,6 +63,7 @@ def on_message(client, userdata, message):
       utc_dt = local_dt.astimezone(pytz.utc)
       influx_timestamp = utc_dt.strftime("%Y-%m-%d %H:%M:%S.%f")
 
+      # creating a point message
       point = Point("measurement") \
       .field('sensor_id', arr[0]) \
       .field('wind_speed', float(arr[3])) \
@@ -138,5 +108,4 @@ client.loop_start()
 client.subscribe("praan/mqtt")
 while True:
     client.on_message = on_message
-    # time.sleep(5)
 

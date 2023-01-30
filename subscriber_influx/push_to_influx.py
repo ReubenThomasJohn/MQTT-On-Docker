@@ -8,11 +8,11 @@ import pytz
 
 import random
 import time
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
-token = os.environ.get("INFLUX_API_TOKEN") # environment vars
-# token = os.getenv("INFLUX_API_TOKEN")
+# token = os.environ.get("INFLUX_API_TOKEN") # environment vars
+token = os.getenv("INFLUX_API_TOKEN")
 org = "Dev"
 url = "https://ap-southeast-2-1.aws.cloud2.influxdata.com"
 

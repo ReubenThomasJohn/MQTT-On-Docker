@@ -68,7 +68,7 @@ client.loop_start()
 
 client.subscribe("praan/mqtt")
 while True:
-    time.sleep(1)
+    # time.sleep(1)
     client.on_message = on_message
 
 # client.loop_end()

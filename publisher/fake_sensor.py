@@ -8,48 +8,6 @@ import threading
 import sys
 import os
 
-# def write_csv():
-#     counter = 1
-#     now = time.time()
-
-#     while True:
-#         trigger = time.time() - now
-#         while not trigger < 10:
-#             # message accumulation due to the network being down
-#             while counter < random.randint(0, ):
-#                 df = pd.DataFrame({'device':str('abc123'), 't':datetime.datetime.now(), 'w':1.23, 'h':23, 
-#                 'pm1': 12, 'pm25': 45, 'pm10':56}, index=[counter]) 
-#                 # df.index = np.arange(1, len(df) + 1)
-#                 df.to_csv('praan_sample.csv', mode='a', header=False)
-#                 time.sleep(10)
-#                 counter += 1
-#             trigger = 0
-#             counter = 1
-#             now = time.time()
-#         else:
-#             df = pd.DataFrame({'device':str('abc123'), 't': datetime.datetime.now(), 'w':1.23, 'h':23,
-#             'pm1': 12, 'pm25': 45, 'pm10':56}, index=[1])
-#             # df.index = np.arange(1, len(df) + 1)
-#             df.to_csv('praan_sample.csv', mode = 'a', header=True)
-#             time.sleep(10)
-
-# def save_to_storage(filename='praan_sample.csv'):
-#     network_downtime = random.randint(20, 40)
-#     print("Network down for: ", str(network_downtime) + " s")
-#     curr_time = time.time()
-#     while True:
-#         if time.time() - curr_time < network_downtime:
-#             df = pd.DataFrame({'device':str('a'), 't':datetime.datetime.now(), 'w':random.randint(32, 36), 
-#             'h':random.randint(180, 200), 'pm1': random.randint(40, 50), 
-#             'pm25': random.randint(40, 80), 'pm10': random.randint(50, 90)}, index=[0]) #index = [counter] 
-#             # df.index = np.arange(1, len(df) + 1)
-#             with open(filename, 'a') as f:
-#                 # df.to_csv('praan_sample.csv', mode='a', header=False)
-#                 df.to_csv(f, mode='a', header=f.tell()==0)
-#                 time.sleep(5) # sensor senses every 5 seconds
-#         else:
-#             sys.exit()
-
 def save_to_storage(filename='praan_sample.csv'):
     network_downtime = random.randint(20, 40)
     print("Network down for: ", str(network_downtime) + " s")
@@ -63,7 +21,7 @@ def save_to_storage(filename='praan_sample.csv'):
         with open(filename, 'a') as f:
             # df.to_csv('praan_sample.csv', mode='a', header=False)
             df.to_csv(f, mode='a', header=f.tell()==0)
-            time.sleep(5) # sensor senses every 5 seconds
+            time.sleep(30) # sensor senses every 5 seconds
     else:
         sys.exit()
 
@@ -107,7 +65,7 @@ def generate_values():
         + " " + str(pm1) + " " + str(pm25) + " " + str(pm10)
     
     print(timestamp)
-    time.sleep(5)
+    time.sleep(30)
     return data
 
 

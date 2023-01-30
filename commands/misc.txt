@@ -5,5 +5,7 @@
 
 ```praan/bin/pip install pandas```
 
+chmod 400 ~/Downloads/grafana.pem
+
 
 

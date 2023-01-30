@@ -46,10 +46,14 @@ def on_message(client, userdata, message):
   write_api = influx_client.write_api(write_options=SYNCHRONOUS)
   time.sleep(.1)
   read_message = message.payload.decode("utf-8")
-  frames = read_message.split(',')
+  if read_message[0] == '[':
+    frames = read_message[1:-1].split(',')
+  else:
+    frames = read_message.split(',')
+  # print("First: ", frames[0])
   for frame in frames:
     arr = frame.split() 
-    print(arr)   
+    # print(arr)   
     # # print(arr)
     # 'a1 2023-01-29 18:47:29.870494 34 198 50 42 50'
     # a= {'device': arr[0],

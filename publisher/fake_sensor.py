@@ -33,29 +33,45 @@ import os
 #             df.to_csv('praan_sample.csv', mode = 'a', header=True)
 #             time.sleep(10)
 
+# def save_to_storage(filename='praan_sample.csv'):
+#     network_downtime = random.randint(20, 40)
+#     print("Network down for: ", str(network_downtime) + " s")
+#     curr_time = time.time()
+#     while True:
+#         if time.time() - curr_time < network_downtime:
+#             df = pd.DataFrame({'device':str('a'), 't':datetime.datetime.now(), 'w':random.randint(32, 36), 
+#             'h':random.randint(180, 200), 'pm1': random.randint(40, 50), 
+#             'pm25': random.randint(40, 80), 'pm10': random.randint(50, 90)}, index=[0]) #index = [counter] 
+#             # df.index = np.arange(1, len(df) + 1)
+#             with open(filename, 'a') as f:
+#                 # df.to_csv('praan_sample.csv', mode='a', header=False)
+#                 df.to_csv(f, mode='a', header=f.tell()==0)
+#                 time.sleep(5) # sensor senses every 5 seconds
+#         else:
+#             sys.exit()
+
 def save_to_storage(filename='praan_sample.csv'):
     network_downtime = random.randint(20, 40)
     print("Network down for: ", str(network_downtime) + " s")
     curr_time = time.time()
-    while True:
-        if time.time() - curr_time < network_downtime:
-            df = pd.DataFrame({'device':str('a'), 't':datetime.datetime.now(), 'w':random.randint(32, 36), 
-            'h':random.randint(180, 200), 'pm1': random.randint(40, 50), 
-            'pm25': random.randint(40, 80), 'pm10': random.randint(50, 90)}, index=[0]) #index = [counter] 
-            # df.index = np.arange(1, len(df) + 1)
-            with open(filename, 'a') as f:
-                # df.to_csv('praan_sample.csv', mode='a', header=False)
-                df.to_csv(f, mode='a', header=f.tell()==0)
-                time.sleep(5) # network down for 'x' seconds
-        else:
-            sys.exit()
+    while time.time() - curr_time < network_downtime:
+
+        df = pd.DataFrame({'device':str('a'), 't':datetime.datetime.now(), 'w':random.randint(32, 36), 
+        'h':random.randint(180, 200), 'pm1': random.randint(40, 50), 
+        'pm25': random.randint(40, 80), 'pm10': random.randint(50, 90)}, index=[0]) #index = [counter] 
+        # df.index = np.arange(1, len(df) + 1)
+        with open(filename, 'a') as f:
+            # df.to_csv('praan_sample.csv', mode='a', header=False)
+            df.to_csv(f, mode='a', header=f.tell()==0)
+            time.sleep(5) # sensor senses every 5 seconds
+    else:
+        sys.exit()
 
 def read_from_storage(csv_file_path):
     df = pd.read_csv(csv_file_path) #optimize this part
     # print(len(df))
     data = []
     for i in range(len(df)):
-
         sensor_id = df['device'][i]
         timestamp = df['t'][i]
         wind_speed = df['w'][i]
@@ -65,14 +81,17 @@ def read_from_storage(csv_file_path):
         pm10 = df['pm10'][i]
 
         data_string = str(sensor_id) + " " + str(timestamp) + " " + str(wind_speed) + " " + str(wind_heading) \
-        + " " + str(pm1) + " " + str(pm25) + " " + str(pm10)
+        + " " + str(pm1) + " " + str(pm25) + " " + str(pm10) + " " + str("end")
+
+        print(timestamp)
 
         # data_string = sensor_id + " " + timestamp + " " + wind_speed + " " + wind_heading \
         # + " " + pm1 + " " + pm25 + " " + pm10
 
         
         data.append(data_string)
-        ["['a", '2023-01-30', '10:48:58.436465', '35', '185', '49', '69', "50'"]
+        # ["['a", '2023-01-30', '10:48:58.436465', '35', '185', '49', '69', "50'"]
+    # print('Data: ', data)
     return data
 
 def generate_values():
@@ -87,6 +106,8 @@ def generate_values():
     data = str(sensor_id) + " " + str(timestamp) + " " + str(wind_speed) + " " + str(wind_heading) \
         + " " + str(pm1) + " " + str(pm25) + " " + str(pm10)
     
+    print(timestamp)
+    time.sleep(5)
     return data
 
 
@@ -115,6 +136,7 @@ def connect_mqtt():
 def publish(client, data):
     msg = str(data)
     result = client.publish(topic, msg)
+    # time.sleep(5)
     # result: [0, 1]
     status = result[0]
     if status == 0:
@@ -141,11 +163,11 @@ while True:
         # print("Stored data: ", data)
         os.remove('praan_sample.csv')
         print("storage cleared \n")
-        time.sleep(2)
+        # time.sleep(2)
     else:
         data = generate_values() 
         publish(client, data)
-        time.sleep(2)
+        # time.sleep(2)
 
 
 # https://www.mdpi.com/2073-4433/6/1/150

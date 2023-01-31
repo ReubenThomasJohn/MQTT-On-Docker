@@ -14,7 +14,7 @@ def save_to_storage(filename='praan_sample.csv'):
     This is made to simulate the storage (writing to a csv file) of the sensor since messages cannot be 
     pushed out. Every 30 seconds, a messsage is written. 
     '''
-    network_downtime = random.randint(20, 40)
+    network_downtime = random.randint(300, 600)
     print("Network down for: ", str(network_downtime) + " s")
     curr_time = time.time()
     while time.time() - curr_time < network_downtime:
@@ -26,7 +26,7 @@ def save_to_storage(filename='praan_sample.csv'):
         with open(filename, 'a') as f:
             # df.to_csv('praan_sample.csv', mode='a', header=False)
             df.to_csv(f, mode='a', header=f.tell()==0)
-            time.sleep(30) # sensor senses every 5 seconds
+            time.sleep(300) # sensor senses every 5 seconds
     else:
         sys.exit()
 
@@ -64,6 +64,7 @@ def generate_values():
     '''
     If network is working, random values are generated every 30 seconds.
     '''
+    time.sleep(300)
     sensor_id = 'a'
     timestamp = datetime.datetime.now()
     wind_speed = random.randint(32, 36)
@@ -76,7 +77,6 @@ def generate_values():
         + " " + str(pm1) + " " + str(pm25) + " " + str(pm10)
     
     print(timestamp)
-    time.sleep(30)
     return data
 
 
